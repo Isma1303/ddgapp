@@ -11,6 +11,9 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
 import { useNavigate } from "react-router-dom";
 import "./NewEvent.css";
+import { DepartmentService } from "../../../services/departments.service";
+import type { IDepartment } from "../../../interfaces/department.interface";
+import { Dropdown } from "primereact/dropdown";
 
 export const NewEvent = () => {
   const navigate = useNavigate();
@@ -21,8 +24,10 @@ export const NewEvent = () => {
     createEvent,
     updateEvent,
     deleteEvent,
-    sendReminder,
   } = useEvents();
+
+  const departmentService = new DepartmentService();
+  const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [visible, setVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
@@ -32,10 +37,26 @@ export const NewEvent = () => {
     start_time: "",
     end_time: "",
     is_active: true,
+    department_id: 0,
   });
 
   useEffect(() => {
     getEvents();
+  }, []);
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      const response: any = await departmentService.getAll();
+
+      const list: IDepartment[] = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.data)
+        ? response.data
+        : [];
+
+      setDepartments(list);
+    };
+    fetchDepartments();
   }, []);
 
   const resetForm = () => {
@@ -45,6 +66,7 @@ export const NewEvent = () => {
       start_time: "",
       end_time: "",
       is_active: true,
+      department_id: 0,
     });
     setIsEditing(false);
     setSelectedEventId(null);
@@ -57,6 +79,7 @@ export const NewEvent = () => {
       start_time: event.start_time,
       end_time: event.end_time,
       is_active: event.is_active,
+      department_id: event.department_id,
     });
     setSelectedEventId(event.service_event_id);
     setIsEditing(true);
@@ -136,13 +159,6 @@ export const NewEvent = () => {
     return time.substring(0, 5);
   };
 
-  const handleSendReminder = async (event_id: number) => {
-    try {
-      await sendReminder(event_id);
-    } catch (error) {
-      console.error("Error sending reminder:", error);
-    }
-  };
 
   const onEventClick = (event: IEvent) => {
     navigate(`/events/detail/${event.service_event_id}`);
@@ -245,6 +261,20 @@ export const NewEvent = () => {
                   setNewEvent({ ...newEvent, service_nm: e.target.value })
                 }
                 placeholder="Ej. Reunión Mensual"
+                className="w-full"
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="department_id">Departamento</label>
+              <Dropdown
+                id="department_id"
+                value={newEvent.department_id}
+                options={departments.map((department: IDepartment) => ({
+                  label: department.department_nm,
+                  value: department.department_id,
+                }))}
+                onChange={(event) => setNewEvent({ ...newEvent, department_id: event.value as number })}
+                placeholder="Seleccione un departamento"
                 className="w-full"
               />
             </div>

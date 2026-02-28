@@ -5,6 +5,8 @@ export interface IEvent {
     start_time: string;
     end_time: string;
     is_active: boolean;
+    department_id: number
+    department_nm?: string
 }
 
 export interface IEventNew extends Omit<IEvent, 'service_event_id'> { }

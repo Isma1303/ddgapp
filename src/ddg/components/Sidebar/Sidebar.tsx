@@ -4,22 +4,14 @@ import { Badge } from 'primereact/badge';
 import { classNames } from 'primereact/utils';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../system/shared/hooks/useAuth';
-import { AuthService } from '../../../admin/services/auth.service';
-import { getTokenUserId } from '../../../system/shared/services/token.service';
 import { useAuthStore } from '../../../system/shared/store/authStore';
-import { useEffect, useState } from 'react';
-
-
 interface SidebarProps {
     collapsed: boolean;
     onNavigate?: () => void;
 }
 
 export default function Sidebar({ collapsed, onNavigate }: SidebarProps) {
-    const userService = new AuthService();
-    const token = useAuthStore((state) => state.token);
-    const userId = getTokenUserId(token);
-    const [role, setRole] = useState<string | null>(null);
+    const role = useAuthStore((state) => state.user?.role_cd ?? null);
 
     const navigate = useNavigate();
     const { logout } = useAuth();
@@ -42,20 +34,6 @@ export default function Sidebar({ collapsed, onNavigate }: SidebarProps) {
             {!collapsed && item.shortcut && <span className="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{item.shortcut}</span>}
         </a>
     );
-
-
-    useEffect(() => {
-        const getUserRole = async () => {
-            try {
-                const data: any = await userService.profile(Number(userId));
-                setRole(data.data.role_cd || 'USER');
-            } catch (error) {
-                setRole(null);
-            }
-        };
-        getUserRole();
-    }, [userId]);
-
     const allItems: any[] = [
         {
             label: 'Dashboard',
@@ -97,18 +75,25 @@ export default function Sidebar({ collapsed, onNavigate }: SidebarProps) {
         },
     ];
 
-    if (!role) {
-        return <div className="h-full surface-section overflow-y-auto w-full flex items-center justify-center">Cargando menú...</div>;
-    }
     let items: any[] = [];
     if (role === 'ADMIN' || role === 'LEADER') {
         items = allItems;
     } else if (role === 'USER') {
-        items = allItems.filter(item =>
-            item.label === 'Eventos' || item.label === 'Configuración'
-        );
-    } else {
-        return <div className="h-full surface-section overflow-y-auto w-full flex items-center justify-center">No tienes permisos para ver el menú.</div>;
+        const allowedSectionLabels = ['Dashboard', 'Eventos', 'Configuración'];
+
+        const userItems = allItems
+            .map((section) => {
+                if (section.label === 'Eventos') {
+                    return {
+                        ...section,
+                        items: section.items.filter((child: any) => child.label === 'Eventos'),
+                    };
+                }
+                return section;
+            })
+            .filter((section) => allowedSectionLabels.includes(section.label));
+
+        items = userItems;
     }
 
     return (
