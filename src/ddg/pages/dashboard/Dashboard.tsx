@@ -1,11 +1,18 @@
+import { useEffect } from "react";
 import { useAuth } from "../../../system/shared/hooks/useAuth";
 import { useAuthStore } from "../../../system/shared/store/authStore";
 import { MainLayout } from "../../components/Layout/MainLayout";
 import { Events } from "../../components/events/Events";
+import { useDashboard } from "../../hooks/useDashboard";
 
 export const Dashboard = () => {
+  const {data} = useDashboard()
   const { user } = useAuth();
   const role = useAuthStore((state) => state.user?.role_cd ?? null);
+
+  useEffect(()=>{
+    console.log(data)
+  })
 
   return (
     <>

@@ -8,11 +8,13 @@ import type {
   IEventUpdate,
 } from "../interfaces/event.interface";
 import { AssignamentsService } from "../../admin/services/assignaments.service";
+import { AttendanceService } from "../services/attendance.service";
 
 export const useEvents = () => {
   const assignamentService = new AssignamentsService();
   const eventService = new EventService();
   const authService = new AuthService();
+  const attendanceService = new AttendanceService();
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<IEvent[]>([]);
 
@@ -20,11 +22,19 @@ export const useEvents = () => {
     setLoading(true);
     try {
       let allUsers = await authService.getAll();
-      if (allUsers && typeof allUsers === "object" && Array.isArray(allUsers.data)) {
+      if (
+        allUsers &&
+        typeof allUsers === "object" &&
+        Array.isArray(allUsers.data)
+      ) {
         allUsers = allUsers.data;
       }
       let assignedUsers = await eventService.getUsersbyEvent(event_id);
-      if (assignedUsers && typeof assignedUsers === "object" && Array.isArray(assignedUsers.data)) {
+      if (
+        assignedUsers &&
+        typeof assignedUsers === "object" &&
+        Array.isArray(assignedUsers.data)
+      ) {
         assignedUsers = assignedUsers.data;
       }
       const assignedIds = Array.isArray(assignedUsers)
@@ -87,21 +97,21 @@ export const useEvents = () => {
     setLoading(true);
     await eventService.assignUserToEvent(event_id, user_id);
     setLoading(false);
-  }
+  };
 
   const loadEventDetail = async (event_id: number) => {
     setLoading(true);
     const response: any = await eventService.getEventById(Number(event_id));
     setLoading(false);
     return response.data;
-  }
+  };
 
   const getUsersbyEvent = async (event_id: number) => {
     setLoading(true);
     const response: any = await eventService.getUsersbyEvent(event_id);
     setLoading(false);
     return response.data;
-  }
+  };
 
   const loadUserEvents = useCallback(async (user_id: number) => {
     try {
@@ -115,6 +125,26 @@ export const useEvents = () => {
     }
   }, []);
 
+  const confirmAttendance = async (
+    user_id: number,
+    service_event_id: number,
+    attendance_status_id: number,
+  ) => {
+    try {
+      setLoading(true);
+      const response: any = await attendanceService.create(
+        user_id,
+        service_event_id,
+        attendance_status_id,
+      );
+      setLoading(false);
+      return response?.data ?? response ?? [];
+    } catch (error) {
+      setLoading(false);
+      return [];
+    }
+  };
+
   return {
     loading,
     events,
@@ -127,7 +157,8 @@ export const useEvents = () => {
     assignUserToEvent,
     loadEventDetail,
     getUsersbyEvent,
-    loadUserEvents
-    ,getUnassignedUsers
+    loadUserEvents,
+    getUnassignedUsers,
+    confirmAttendance,
   };
 };
