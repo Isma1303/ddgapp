@@ -1,0 +1,62 @@
+.admin-mobile-card-list {
+  animation: adminCardsFadeIn 0.35s ease-out;
+}
+
+.admin-mobile-card {
+  background: #ffffff;
+  border: 1px solid #e2edf3;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(11, 70, 92, 0.08);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+  animation: adminCardLiftIn 0.35s ease-out;
+}
+
+.admin-mobile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(11, 70, 92, 0.14);
+}
+
+.admin-mobile-card__actions {
+  border-top: 1px solid #edf3f7;
+  padding-top: 0.75rem;
+}
+
+.admin-mobile-card__action-btn.p-button.p-button-rounded {
+  box-shadow: 0 6px 16px rgba(16, 84, 109, 0.15);
+}
+
+.admin-mobile-card__add-btn {
+  box-shadow: 0 10px 24px rgba(10, 176, 209, 0.24);
+}
+
+@keyframes adminCardsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminCardLiftIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-mobile-card {
+    border-radius: 0.9rem;
+  }
+}

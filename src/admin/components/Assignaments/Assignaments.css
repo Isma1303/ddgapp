@@ -1,0 +1,156 @@
+.assignaments-page-header {
+  animation: assignamentsFadeIn 0.35s ease-out;
+}
+
+.assignaments-tabview,
+.assignaments-subtabview {
+  background: transparent;
+}
+
+.assignaments-tabview .p-tabview-nav,
+.assignaments-subtabview .p-tabview-nav {
+  border-bottom: 1px solid var(--ddg-border);
+  gap: 0.35rem;
+}
+
+.assignaments-tabview .p-tabview-nav li .p-tabview-nav-link,
+.assignaments-subtabview .p-tabview-nav li .p-tabview-nav-link {
+  border: 0;
+  border-radius: 999px;
+  color: var(--ddg-text-muted);
+  font-weight: 600;
+  margin: 0;
+  padding: 0.65rem 1.05rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.assignaments-tabview
+  .p-tabview-nav
+  li:not(.p-highlight)
+  .p-tabview-nav-link:hover,
+.assignaments-subtabview
+  .p-tabview-nav
+  li:not(.p-highlight)
+  .p-tabview-nav-link:hover {
+  background: #f3fbfd;
+  color: #0b8ea9;
+}
+
+.assignaments-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link,
+.assignaments-subtabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background: linear-gradient(135deg, var(--ddg-primary), #0bc0d6);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(10, 176, 209, 0.28);
+}
+
+.assignaments-tabview .p-tabview-panels,
+.assignaments-subtabview .p-tabview-panels {
+  background: transparent;
+  padding: 1rem 0 0;
+}
+
+.assignaments-dataview .p-dataview-content {
+  background: transparent;
+}
+
+.assignaments-user-card {
+  background: #ffffff;
+  border: 1px solid #e6f0f5;
+  border-radius: 1.1rem;
+  box-shadow: 0 8px 22px rgba(15, 84, 110, 0.08);
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease;
+  animation: assignamentsLiftIn 0.35s ease-out;
+}
+
+.assignaments-user-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(15, 84, 110, 0.14);
+}
+
+.assignaments-icon-btn.p-button.p-button-text {
+  color: #0a9cb9;
+}
+
+.assignaments-label {
+  color: #5f7c8c;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.assignaments-role-tag {
+  background: #eff9fd;
+  border: 1px solid #ccecf5;
+  color: #0d7f99;
+}
+
+.assignaments-form-card,
+.assignaments-group-card {
+  background: #ffffff;
+  border: 1px solid #e2edf3;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(11, 70, 92, 0.07);
+  animation: assignamentsFadeIn 0.35s ease-out;
+}
+
+.assignaments-member-row {
+  background: #fbfdff;
+  border: 1px solid #e3edf3;
+  border-radius: 0.8rem;
+}
+
+.assignaments-empty {
+  background: #f8fbfd;
+  border: 1px dashed #c6dde8;
+  border-radius: 0.9rem;
+  padding: 1rem;
+}
+
+@keyframes assignamentsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes assignamentsLiftIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 576px) {
+  .assignaments-tabview .p-tabview-nav,
+  .assignaments-subtabview .p-tabview-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .assignaments-tabview .p-tabview-nav li .p-tabview-nav-link,
+  .assignaments-subtabview .p-tabview-nav li .p-tabview-nav-link {
+    padding: 0.6rem 0.9rem;
+    white-space: nowrap;
+  }
+
+  .assignaments-form-card,
+  .assignaments-group-card {
+    border-radius: 0.85rem;
+  }
+}

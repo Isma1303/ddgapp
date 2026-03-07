@@ -125,6 +125,28 @@ export const useEvents = () => {
     }
   }, []);
 
+  const notifyAbsence = async (
+    user_id: number,
+    service_event_id: number,
+    attendance_status_id: number,
+    notes?: string,
+  ) => {
+    try {
+      setLoading(true);
+      const response: any = await attendanceService.update(
+        user_id,
+        service_event_id,
+        attendance_status_id,
+        notes,
+      );
+      setLoading(false);
+      return response?.data ?? response ?? [];
+    } catch (error) {
+      setLoading(false);
+      return [];
+    }
+  };
+
   const confirmAttendance = async (
     user_id: number,
     service_event_id: number,
@@ -160,5 +182,6 @@ export const useEvents = () => {
     loadUserEvents,
     getUnassignedUsers,
     confirmAttendance,
+    notifyAbsence,
   };
 };

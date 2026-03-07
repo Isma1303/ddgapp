@@ -1,0 +1,56 @@
+.app-shell {
+  background: #ffffff;
+}
+
+.app-shell__body {
+  background: #ffffff;
+}
+
+.app-shell__sidebar {
+  border-right: 1px solid var(--ddg-border);
+  background: #ffffff;
+}
+
+.app-shell__content {
+  min-width: 0;
+}
+
+.app-shell__main {
+  background: #ffffff;
+}
+
+.app-shell__drawer {
+  width: min(90vw, 19rem);
+}
+
+.app-header {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid var(--ddg-border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--ddg-shadow-sm);
+}
+
+.app-header__titles {
+  padding-left: 0.25rem;
+}
+
+.app-header__status {
+  background: var(--ddg-surface-card);
+  border: 1px solid var(--ddg-border);
+  border-radius: 999px;
+  color: var(--ddg-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+}
+
+.app-header__status-dot {
+  color: var(--ddg-success);
+  font-size: 0.52rem;
+}
+
+@media (max-width: 991px) {
+  .app-shell__main {
+    padding-bottom: 0.75rem;
+  }
+}

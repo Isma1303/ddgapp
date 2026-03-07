@@ -1,75 +1,131 @@
-# React + TypeScript + Vite
+# DDG App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicacion web desarrollada con React + TypeScript para gestion interna de eventos, usuarios, roles y asignaciones.
 
-Currently, two official plugins are available:
+## Modulos de la aplicacion
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### `src/admin`
 
-## React Compiler
+Modulo de administracion.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- `components/Login`: inicio de sesion.
+- `components/Users`: CRUD de usuarios, activacion, perfil y cambio de contrasena.
+- `components/Roles`: CRUD de roles.
+- `components/Assignaments`: asignacion de roles y asignacion de usuarios a departamentos (manager/integrante).
+- `components/profile`: configuracion de perfil y mensajes.
+- `hooks`: logica de formularios y datagrids (`useLoginForm`, `useUsersDataGrid`, `useRolesDataGrid`, etc.).
+- `services`: consumo de APIs de auth, roles y asignaciones.
 
-Note: This will impact Vite dev & build performances.
+### `src/ddg`
 
-## Expanding the ESLint configuration
+Modulo funcional principal del sistema.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `pages/dashboard`: vista de entrada para usuarios autenticados.
+- `components/events`: calendario de eventos, detalle y creacion de eventos.
+- `components/announcements`: modulo de anuncios/documentos (base).
+- `components/Layout`: layout principal con header, sidebar y footer.
+- `hooks`: logica de dashboard y eventos.
+- `services`: servicios de dashboard, eventos, departamentos y asistencia.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### `src/system`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Modulo transversal de infraestructura.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `config.ts`: configuracion global (`VITE_API_URL`).
+- `service.ts`: `ParentService` basado en Axios con interceptores de autenticacion.
+- `shared/libs`: rutas publicas/privadas y control de navegacion.
+- `shared/store`: estado global de autenticacion con Zustand.
+- `shared/services`: manejo de token y utilidades de pantalla/responsive.
+
+## Librerias usadas
+
+### Base
+
+- `react` y `react-dom`
+- `typescript`
+- `vite`
+- `react-router-dom`
+
+### UI y experiencia visual
+
+- `primereact`: componentes UI (DataTable, Dialog, PanelMenu, Toast, Button, etc.).
+- `primeicons`: iconografia de PrimeReact.
+- `primeflex`: utilidades CSS para layout responsive.
+- `bootstrap-icons`: iconos adicionales.
+
+### Calendario y fechas
+
+- `react-big-calendar`: calendario principal para eventos.
+- `react-big-schedule`: soporte de planificacion.
+- `dayjs`: manejo y formateo de fechas.
+
+### Estado y red
+
+- `zustand`: estado global de autenticacion.
+- `axios`: cliente HTTP para consumir APIs.
+
+### Otras
+
+- `react-dnd` y `react-dnd-html5-backend`: interacciones drag and drop.
+- `dotenv`: soporte para variables de entorno.
+
+## Estilos actuales
+
+La UI combina estilos de libreria con estilos locales:
+
+1. Tema global de PrimeReact cargado en `src/App.tsx`:
+   `lara-light-cyan` + `primereact.min.css` + `primeicons.css` + `primeflex.css`.
+
+2. Enfoque visual predominante:
+
+- Uso de utilidades PrimeFlex (`flex`, `gap`, `surface-card`, `shadow-*`, `border-round`).
+- Componentes PrimeReact como base de la interfaz.
+- Estilo claro (sin modo oscuro implementado de forma global).
+
+3. CSS personalizado actual:
+
+- `src/admin/components/Login/LoginForm.css`: estilos del formulario de login y responsive basico.
+- `src/ddg/components/events/NewEvent/NewEvent.css`: estilos mas completos del proyecto (cards, variables CSS, animaciones, formulario y responsive).
+- `src/ddg/components/events/Events.css`: ajustes puntuales para acciones de cards.
+
+4. Notas importantes:
+
+- Varios archivos CSS existen como placeholders y actualmente estan vacios (por ejemplo header, sidebar, footer, dashboard, users).
+- En `Events.tsx` tambien hay estilos inline para personalizar `react-big-calendar`.
+
+## Rutas principales
+
+- `/`: login (ruta publica).
+- `/dashboard`: dashboard.
+- `/events`: calendario de eventos.
+- `/events/new`: administracion/creacion de eventos.
+- `/events/detail/:event_id` y `/events/:event_id`: detalle de evento.
+- `/announcements`: anuncios.
+- `/users`, `/roles`, `/assignaments`: administracion.
+- `/profile/settings` y `/profile/messages`: perfil.
+
+Todas las rutas privadas se protegen con `PrivateRoute`.
+
+## Configuracion de entorno
+
+Variable esperada:
+
+```env
+VITE_API_URL=http://localhost:3000/api/v1
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Si no se define, la app usa ese valor por defecto (`src/system/config.ts`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `npm run dev`: entorno de desarrollo.
+- `npm run build`: compilacion TypeScript + build de Vite.
+- `npm run preview`: vista previa del build.
+- `npm run lint`: lint del proyecto.
+
+## Ejecucion local
+
+```bash
+npm install
+npm run dev
 ```

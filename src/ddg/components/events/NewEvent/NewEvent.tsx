@@ -17,14 +17,8 @@ import { Dropdown } from "primereact/dropdown";
 
 export const NewEvent = () => {
   const navigate = useNavigate();
-  const {
-    events,
-    loading,
-    getEvents,
-    createEvent,
-    updateEvent,
-    deleteEvent,
-  } = useEvents();
+  const { events, loading, getEvents, createEvent, updateEvent, deleteEvent } =
+    useEvents();
 
   const departmentService = new DepartmentService();
   const [departments, setDepartments] = useState<IDepartment[]>([]);
@@ -51,8 +45,8 @@ export const NewEvent = () => {
       const list: IDepartment[] = Array.isArray(response)
         ? response
         : Array.isArray(response?.data)
-        ? response.data
-        : [];
+          ? response.data
+          : [];
 
       setDepartments(list);
     };
@@ -110,7 +104,7 @@ export const NewEvent = () => {
     <div className="event-list-header">
       <div className="header-info">
         <h1>Próximos Eventos</h1>
-        <p>Gestiona y visualiza todos tus eventos institucionales</p>
+        <p>Gestiona y visualiza todos tus eventos de tu Ministerio</p>
       </div>
       <Button
         label="Nuevo Evento"
@@ -159,10 +153,9 @@ export const NewEvent = () => {
     return time.substring(0, 5);
   };
 
-
   const onEventClick = (event: IEvent) => {
     navigate(`/events/detail/${event.service_event_id}`);
-  }
+  };
 
   return (
     <MainLayout>
@@ -181,7 +174,6 @@ export const NewEvent = () => {
                   key={event.service_event_id || index}
                   className="event-card animate-fade-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
-                 
                 >
                   <div className="card-header">
                     <div className="date-badge">
@@ -221,7 +213,7 @@ export const NewEvent = () => {
                       icon="pi pi-eye"
                       className="p-button-rounded p-button-success p-button-text"
                       tooltip="Ver Detalle"
-                       onClick={() => onEventClick(event)}
+                      onClick={() => onEventClick(event)}
                     />
                   </div>
                 </Card>
@@ -273,7 +265,12 @@ export const NewEvent = () => {
                   label: department.department_nm,
                   value: department.department_id,
                 }))}
-                onChange={(event) => setNewEvent({ ...newEvent, department_id: event.value as number })}
+                onChange={(event) =>
+                  setNewEvent({
+                    ...newEvent,
+                    department_id: event.value as number,
+                  })
+                }
                 placeholder="Seleccione un departamento"
                 className="w-full"
               />
@@ -341,6 +338,18 @@ export const NewEvent = () => {
                   className="w-full"
                 />
               </div>
+            </div>
+            <div className="field">
+              <label htmlFor="notes">Notas Adicionales</label>
+              <InputText
+                id="notes"
+                value={newEvent.notes}
+                onChange={(e) =>
+                  setNewEvent({ ...newEvent, notes: e.target.value })
+                }
+                placeholder="Ej. Notas adicionales sobre el evento"
+                className="w-full"
+              />
             </div>
           </div>
         </Dialog>

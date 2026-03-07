@@ -1,0 +1,77 @@
+.ddg-sidebar {
+  background: transparent;
+  padding: 0.65rem 0.5rem 0.75rem;
+}
+
+.ddg-sidebar__brand {
+  align-items: flex-start;
+  border: 1px solid var(--ddg-border);
+  border-radius: var(--ddg-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.65rem;
+  padding: 0.75rem 0.9rem;
+  background: #ffffff;
+}
+
+.ddg-sidebar__brand-title {
+  color: var(--ddg-text-main);
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ddg-sidebar__brand-subtitle {
+  color: var(--ddg-text-muted);
+  font-size: 0.78rem;
+}
+
+.ddg-sidebar__menu.p-panelmenu .p-panelmenu-header .p-menuitem-link,
+.ddg-sidebar__menu.p-panelmenu .p-panelmenu-content .p-menuitem-link {
+  border-radius: 0.65rem;
+  color: var(--ddg-text-main);
+  margin: 0.1rem 0;
+  padding: 0.72rem 0.8rem;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ddg-sidebar__menu.p-panelmenu .p-panelmenu-header .p-menuitem-link:hover,
+.ddg-sidebar__menu.p-panelmenu .p-panelmenu-content .p-menuitem-link:hover {
+  background: var(--ddg-primary-soft);
+  color: #066c82;
+}
+
+.ddg-sidebar__menu.p-panelmenu .p-panelmenu-panel {
+  background: transparent;
+  border: none;
+  margin-bottom: 0;
+}
+
+.ddg-sidebar__item .p-menuitem-icon,
+.ddg-sidebar__menu .p-menuitem-icon {
+  color: #087f96;
+}
+
+.collapsed-menu .p-panelmenu-icon {
+  display: none !important;
+}
+
+.collapsed-menu .p-panelmenu-header .p-menuitem-link {
+  justify-content: center !important;
+  padding: 0.75rem 0 !important;
+}
+
+.collapsed-menu .p-menuitem-icon {
+  margin-right: 0 !important;
+  font-size: 1.35rem;
+}
+
+.collapsed-menu .p-panelmenu-content {
+  display: none !important;
+}

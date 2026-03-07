@@ -1,0 +1,19 @@
+{
+  "name": "DDG App",
+  "short_name": "DDG",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ab0d1",
+  "description": "Aplicacion corporativa DDG para gestion de eventos, usuarios y asignaciones.",
+  "icons": [
+    {
+      "src": "/ddg_logo.jpg",
+      "sizes": "1765x1765",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

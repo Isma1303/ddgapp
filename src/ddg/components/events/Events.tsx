@@ -2,10 +2,13 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { MainLayout } from "../Layout/MainLayout";
 import { Calendar, dayjsLocalizer, Views } from "react-big-calendar";
 import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
+import "dayjs/locale/es";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Button } from "primereact/button";
 import { SelectButton } from "primereact/selectbutton";
 import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
 import { useScreenService } from "../../../system/shared/services/screen.service";
 import { useEvents } from "../../hooks/useEvents";
 import { useAuthStore } from "../../../system/shared/store/authStore";
@@ -13,12 +16,21 @@ import { getTokenUserId } from "../../../system/shared/services/token.service";
 import "./Events.css";
 import { Toast } from "primereact/toast";
 
+dayjs.extend(updateLocale);
+dayjs.updateLocale("es", { weekStart: 1 });
+dayjs.locale("es");
+
 const localizer = dayjsLocalizer(dayjs);
+const ABSENCE_STATUS_ID = 2;
+
 export const Events = () => {
-  const { loadUserEvents, confirmAttendance } = useEvents();
+  const { loadUserEvents, confirmAttendance, notifyAbsence } = useEvents();
   const [allEvents, setAllEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [isAbsenceDialogOpen, setIsAbsenceDialogOpen] = useState(false);
+  const [absenceNotes, setAbsenceNotes] = useState("");
+  const [isSubmittingAbsence, setIsSubmittingAbsence] = useState(false);
   const [view, setView] = useState<any>(Views.WEEK);
   const [date, setDate] = useState(new Date());
   const { sizes } = useScreenService();
@@ -67,6 +79,13 @@ export const Events = () => {
     { label: "Mes", value: Views.MONTH },
   ];
 
+  const calendarTitle =
+    selectedView === Views.DAY
+      ? dayjs(date).locale("es").format("DD [de] MMMM, YYYY")
+      : selectedView === Views.WEEK
+        ? `${dayjs(date).locale("es").startOf("week").format("DD MMM")} - ${dayjs(date).locale("es").endOf("week").format("DD MMM, YYYY")}`
+        : dayjs(date).locale("es").format("MMMM YYYY");
+
   const eventPropGetter = () => {
     return {
       style: {
@@ -110,6 +129,44 @@ export const Events = () => {
         summary: "Error",
         detail: "Error al confirmar asistencia",
       });
+    }
+  };
+
+  const handleNotifyAbsence = async () => {
+    const eventId = selectedEvent?.service_event_id ?? selectedEvent?.event_id;
+    const notes = absenceNotes.trim();
+
+    if (!userId || !eventId) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Atención",
+        detail: "No se pudo identificar el evento o el usuario",
+      });
+      return;
+    }
+
+    try {
+      setIsSubmittingAbsence(true);
+      await notifyAbsence(userId, eventId, ABSENCE_STATUS_ID, notes);
+
+      toast.current?.show({
+        severity: "success",
+        summary: "Éxito",
+        detail: "Ausencia notificada",
+      });
+
+      setIsAbsenceDialogOpen(false);
+      setAbsenceNotes("");
+      setIsEventDialogOpen(false);
+      setSelectedEvent(null);
+    } catch (error) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Error al notificar ausencia",
+      });
+    } finally {
+      setIsSubmittingAbsence(false);
     }
   };
 
@@ -171,11 +228,7 @@ export const Events = () => {
               className="p-button-text p-button-secondary p-button-sm font-medium ml-2"
             />
             <h2 className="m-0 text-base md:text-lg font-medium text-800 ml-0 md:ml-3 mt-2 md:mt-0">
-              {selectedView === Views.DAY
-                ? dayjs(date).format("DD [de] MMMM, YYYY")
-                : selectedView === Views.WEEK
-                  ? `${dayjs(date).startOf("week").format("DD MMM")} - ${dayjs(date).endOf("week").format("DD MMM, YYYY")}`
-                  : dayjs(date).format("MMMM YYYY")}
+              {calendarTitle}
             </h2>
           </div>
 
@@ -253,6 +306,7 @@ export const Events = () => {
           </style>
           <Calendar
             localizer={localizer}
+            culture="es"
             events={filteredEvents}
             startAccessor="start"
             endAccessor="end"
@@ -328,6 +382,15 @@ export const Events = () => {
             </div>
             <div className="card-actions">
               <Button
+                icon="pi pi-times-circle"
+                className="p-button-rounded p-button-danger p-button-text"
+                tooltip="Notificar Ausencia"
+                onClick={() => {
+                  setAbsenceNotes("");
+                  setIsAbsenceDialogOpen(true);
+                }}
+              />
+              <Button
                 icon="pi pi-check-circle"
                 className="p-button-rounded p-button-success p-button-text"
                 tooltip="Confirmar Asistencia"
@@ -338,6 +401,47 @@ export const Events = () => {
             </div>
           </div>
         )}
+      </Dialog>
+
+      <Dialog
+        header="Notificar ausencia"
+        visible={isAbsenceDialogOpen}
+        style={{ width: isMobile ? "92vw" : "30rem" }}
+        onHide={() => {
+          setIsAbsenceDialogOpen(false);
+          setAbsenceNotes("");
+        }}
+      >
+        <div className="flex flex-column gap-3">
+          <div>
+            <label htmlFor="absence-notes" className="text-700 font-medium">
+              Motivo
+            </label>
+            <InputTextarea
+              id="absence-notes"
+              value={absenceNotes}
+              onChange={(e) =>
+                setAbsenceNotes((e.target.value ?? "").slice(0, 255))
+              }
+              rows={5}
+              autoResize
+              className="w-full mt-2"
+              maxLength={255}
+              placeholder="Escribe el motivo de tu ausencia"
+            />
+            <small className="text-500">{absenceNotes.length}/255</small>
+          </div>
+
+          <div className="flex justify-content-end">
+            <Button
+              label="Confirmar"
+              icon="pi pi-check"
+              onClick={handleNotifyAbsence}
+              loading={isSubmittingAbsence}
+              disabled={isSubmittingAbsence}
+            />
+          </div>
+        </div>
       </Dialog>
     </MainLayout>
   );
