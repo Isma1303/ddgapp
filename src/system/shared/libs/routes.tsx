@@ -12,113 +12,122 @@ import { Roles } from "../../../admin/components/Roles/Roles";
 import { Assignaments } from "../../../admin/components/Assignaments/Assignaments";
 import { NewEvent } from "../../../ddg/components/events/NewEvent/NewEvent";
 import { EventDetail } from "../../../ddg/components/events/EventDetail/EventDetail";
+import { Products } from "../../../coffee/components/items/Products";
 
 export const Routes = () => {
-    return (
-        <BrowserRouter>
-            <RouterRoutes>
-                <Route
-                    path="/"
-                    element={
-                        <PublicRoute>
-                            <Login />
-                        </PublicRoute>
-                    }
-                />
+  return (
+    <BrowserRouter>
+      <RouterRoutes>
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
 
-                <Route
-                    path="/dashboard"
-                    element={
-                        <PrivateRoute>
-                            <Dashboard />
-                        </PrivateRoute>
-                    }
-                />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
 
-                <Route
-                    path="/events"
-                    element={
-                        <PrivateRoute>
-                            <Events />
-                        </PrivateRoute>
-                    }
-                />
+        <Route
+          path="/events"
+          element={
+            <PrivateRoute>
+              <Events />
+            </PrivateRoute>
+          }
+        />
 
-                <Route
-                    path="/announcements"
-                    element={
-                        <PrivateRoute>
-                            <Announcements />
-                        </PrivateRoute>
-                    }
-                />
+        <Route
+          path="/announcements"
+          element={
+            <PrivateRoute>
+              <Announcements />
+            </PrivateRoute>
+          }
+        />
 
-                <Route
-                    path="/profile/settings"
-                    element={
-                        <PrivateRoute>
-                            <Settings />
-                        </PrivateRoute>
-                    }
-                />
+        <Route
+          path="/profile/settings"
+          element={
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
 
-                <Route
-                    path="/profile/messages"
-                    element={
-                        <PrivateRoute>
-                            <Messages />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/users"
-                    element={
-                        <PrivateRoute>
-                            <Users />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/roles"
-                    element={
-                        <PrivateRoute>
-                            <Roles />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/assignaments"
-                    element={
-                        <PrivateRoute>
-                            <Assignaments />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/events/new"
-                    element={
-                        <PrivateRoute>
-                            <NewEvent />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/events/detail/:event_id"
-                    element={
-                        <PrivateRoute>
-                            <EventDetail />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/events/:event_id"
-                    element={
-                        <PrivateRoute>
-                            <EventDetail />
-                        </PrivateRoute>
-                    }
-                />
-            </RouterRoutes>
-        </BrowserRouter>
-    )
-}
+        <Route
+          path="/profile/messages"
+          element={
+            <PrivateRoute>
+              <Messages />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute>
+              <Users />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/roles"
+          element={
+            <PrivateRoute>
+              <Roles />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/assignaments"
+          element={
+            <PrivateRoute>
+              <Assignaments />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/events/new"
+          element={
+            <PrivateRoute>
+              <NewEvent />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/events/detail/:event_id"
+          element={
+            <PrivateRoute>
+              <EventDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/events/:event_id"
+          element={
+            <PrivateRoute>
+              <EventDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/coffee/products"
+          element={
+            <PrivateRoute>
+              <Products />
+            </PrivateRoute>
+          }
+        />
+      </RouterRoutes>
+    </BrowserRouter>
+  );
+};

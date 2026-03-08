@@ -75,6 +75,18 @@ export default function Sidebar({ collapsed, onNavigate }: SidebarProps) {
       ],
     },
     {
+      label: "Cafeteria",
+      icon: "bi bi-fork-knife",
+      items: [
+        {
+          label: "Gestionar productos",
+          icon: "bi bi-box",
+          url: "/coffee/products",
+          template: childItemRenderer,
+        },
+      ],
+    },
+    {
       label: "Eventos",
       icon: "pi pi-calendar",
       items: [
