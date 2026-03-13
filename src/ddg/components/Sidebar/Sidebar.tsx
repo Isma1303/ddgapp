@@ -79,9 +79,21 @@ export default function Sidebar({ collapsed, onNavigate }: SidebarProps) {
       icon: "bi bi-fork-knife",
       items: [
         {
+          label: "Gestionar categorias",
+          icon: "bi bi-tags",
+          url: "/coffee/product-categories",
+          template: childItemRenderer,
+        },
+        {
           label: "Gestionar productos",
           icon: "bi bi-box",
           url: "/coffee/products",
+          template: childItemRenderer,
+        },
+        {
+          label: "Modulo de ventas",
+          icon: "bi bi-receipt",
+          url: "/coffee/sales",
           template: childItemRenderer,
         },
       ],
@@ -100,6 +112,42 @@ export default function Sidebar({ collapsed, onNavigate }: SidebarProps) {
           label: "Calendario",
           icon: "pi pi-calendar",
           url: "/events",
+          template: childItemRenderer,
+        },
+      ],
+    },
+    {
+      label: "Carnets QR",
+      icon: "pi pi-id-card",
+      items: [
+        {
+          label: "Carnet de usuario",
+          icon: "pi pi-qrcode",
+          url: "/user-cards/card",
+          template: childItemRenderer,
+        },
+        {
+          label: "Escanear Carnet",
+          icon: "pi pi-camera",
+          url: "/user-cards/scan",
+          template: childItemRenderer,
+        },
+        {
+          label: "Registrar asistencia",
+          icon: "pi pi-check-square",
+          url: "/user-cards/attendance",
+          template: childItemRenderer,
+        },
+        {
+          label: "Crear carnet",
+          icon: "pi pi-id-card",
+          url: "/user-cards/create",
+          template: childItemRenderer,
+        },
+        {
+          label: "Listado e impresion",
+          icon: "pi pi-print",
+          url: "/user-cards/list",
           template: childItemRenderer,
         },
       ],

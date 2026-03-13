@@ -6,8 +6,6 @@ type Sizes = Record<
 >;
 
 function getSizes(): Sizes {
-  // breakpoints alineados a PrimeFlex:
-  // xs < 576, sm 576-767, md 768-991, lg >= 992 (incluye xl)
   const w = window.innerWidth;
 
   return {
@@ -27,17 +25,15 @@ export function useScreenService() {
           "screen-small": false,
           "screen-medium": false,
           "screen-large": false,
-        }
+        },
   );
 
-  // Esto reemplaza tu "changed.emit()": cada resize actualiza y “notifica”
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     let raf = 0;
 
     const onResize = () => {
-      // throttle con requestAnimationFrame para no spamear renders
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         setSizes(getSizes());
@@ -45,7 +41,6 @@ export function useScreenService() {
     };
 
     window.addEventListener("resize", onResize, { passive: true });
-    // por si cambia zoom/orientación o al montar:
     onResize();
 
     return () => {
@@ -54,7 +49,6 @@ export function useScreenService() {
     };
   }, []);
 
-  // si quieres un "changed" tipo EventEmitter, puedes derivarlo:
   const changedKey = useMemo(() => JSON.stringify(sizes), [sizes]);
 
   return { sizes, changedKey };

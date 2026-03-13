@@ -28,3 +28,13 @@ export interface IUserProfile {
   role_nm: string;
   role_cd: string;
 }
+
+export interface IUserCardInfo {
+  user_id: number;
+  user_nm: string;
+  user_lt: string;
+  email: string;
+  department_nm?: string;
+  role_cd?: string;
+  role_nm?: string;
+}

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MainLayout } from "../../../ddg/components/Layout/MainLayout";
-import { useProductCategories } from "../../hooks/useProductCategories";
-import { useProducts } from "../../hooks/useProducts";
+import { MainLayout } from "../../../../ddg/components/Layout/MainLayout";
+import { useProductCategories } from "../../../hooks/useProductCategories";
+import { useProducts } from "../../../hooks/useProducts";
 import type {
   IProduct,
   IProductNew,
-} from "../../interfaces/products.interface";
+} from "../../../interfaces/products.interface";
 import { Toast } from "primereact/toast";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
